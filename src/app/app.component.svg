@@ -1,0 +1,25 @@
+<svg 
+	[attr.width]="container.w" 
+	[attr.height]="container.h" 
+	(click)="addCircle()">
+
+	<text *ngIf="!clicked" x="20" y="15">Click to make circles</text>
+
+  <line *ngFor="let line of timeLine.lines" 
+    [attr.x1]="line.x1"
+    [attr.y1]="line.y1"    
+    [attr.x2]="line.x2"    
+    [attr.y2]="line.y2"    
+    [attr.stroke]="line.stroke"
+    [attr.stroke-width]="line.stroke_width"
+    [attr.stroke-dasharray]="line.stroke_dasharray"
+  />
+	<circle 
+		*ngFor="let circle of circles"
+		[attr.stroke]="circle.stroke"
+		[attr.cx]="circle.point.x"
+		[attr.cy]="circle.point.y"
+		[attr.r]="circle.radius" 
+		[attr.fill]="circle.fill" />
+    
+</svg>
