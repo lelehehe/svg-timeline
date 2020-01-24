@@ -24,6 +24,11 @@ export class AppComponent {
       message: ""
     },
     {
+      title: "Origin",
+      isCurrent: false,
+      message: ""
+    },
+    {
       title: "On Water",
       isCurrent: true,
       message: "Arriving in 48h"
@@ -39,11 +44,4 @@ export class AppComponent {
     this.timeLine = new TimeLine(this.container, this.sample1);
   }
 
-  addCircle() {
-    this.clicked = true;
-
-    const newCircle: Circle = new Circle(this.container);
-    this.circles.push(newCircle);
-
-  }
 }

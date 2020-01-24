@@ -1,9 +1,11 @@
-import { Point, Container } from './types';
+import { Point, Container, TrackingTraceState } from './types';
+import { Spot } from './spot';
 
 export interface TrackingTrace {
   title: string;
   isCurrent: boolean;
   message: string;
+  state?:TrackingTraceState;
 }
 
 export interface Line {
@@ -21,30 +23,46 @@ export class TimeLine {
   line_y = 27;
   circle_r = 7;
   points: Point[] = [];
+  step: number;
 
   lines: Line[] = [];
+  trackingTraces: TrackingTrace[] = [];
+  spots: Spot[] = [];
 
-  constructor(private container: Container, private trackingTraces: TrackingTrace[]) {
-    console.log(this.trackingTraces);
+  constructor(private container: Container, private trackingTracesOriginal: TrackingTrace[]) {
+    this.polishData();
     this.buildPoints();
     this.buildLines();
-    this.buildCircles();
+    this.buildStops();
+  }
+
+  polishData() {
+    let foundCurrent = false;
+    this.trackingTracesOriginal.map(item => {
+      let state: TrackingTraceState; 
+      if (foundCurrent) { state = TrackingTraceState.FUTURE; }
+      else if (item.isCurrent) {
+        state = TrackingTraceState.CURRENT;
+        foundCurrent = true;
+      } else ( state = TrackingTraceState.PAST );
+      
+      const trace = { ... item, state};  
+      this.trackingTraces.push(trace);
+    });
+    console.log('trace', this.trackingTraces);
   }
 
   buildPoints() {
     const length = this.container.w - this.circle_r - this.circle_r;
-    const step = length / (this.trackingTraces.length - 1);
+    this.step = length / (this.trackingTraces.length - 1);
     for (var i = 0; i < this.trackingTraces.length; i++) {
-      const x = this.circle_r + (step * i)
+      const x = this.circle_r + (this.step * i)
       this.points.push({x: x, y: this.line_y});
     }
     console.log('points', this.points);
   }
 
   buildLines() {
-    // this.lines = [
-    //   { x1: 12, y1: 27, x2: 121, y2: 27, stroke: '#173A64', stroke_width: 2, stroke_dasharray: '5 3'}
-    // ];
     let isSolid = !this.trackingTraces[0].isCurrent;
     for (var i = 1; i < this.trackingTraces.length; i++) {
       const line: Line = {
@@ -62,8 +80,44 @@ export class TimeLine {
     console.log('lines', this.lines);
   }
 
-  buildCircles() {
+  buildStops() {
 
+    this.trackingTraces.map((item, i) => {
+      const spot = new Spot(this.points[i]);
+      const state = this.trackingTraces[i].state;
+      spot.state = state;
+
+      if (state === TrackingTraceState.PAST) {
+        spot.radius = 7;
+        spot.fill = 'white';
+        spot.stroke = '#173A64';
+        spot.stroke_width = 2;
+        spot.tick = this.getTick(i);
+
+      } else if (state === TrackingTraceState.FUTURE) {
+        spot.radius = 8;
+        spot.fill = '#CFCFCF';
+      } else {
+        spot.radius = 9;
+        spot.fill = 'white';
+        spot.stroke = '#173A64';
+        spot.stroke_width = 2;
+      }
+      spot.radius = state === TrackingTraceState.PAST? 7 : state === TrackingTraceState.FUTURE? 8 : 9;
+
+      this.spots.push(spot);
+    });
+    console.log('spots', this.spots);
   }
 
+  private getTick(i:number) {
+    const tick0 = { p1:{ x: 5.0, y: 27.6}, p2: {x: 6.3, y: 29.8}, p3: {x: 5.7, y: 29.8}, p4: {x: 11.2, y: 24.4} };
+    let tick = { ...tick0 };
+    let offset = i * this.step;
+    tick.p1.x += offset;
+    tick.p2.x += offset;
+    tick.p3.x += offset;
+    tick.p4.x += offset;
+    return tick;
+  }
 }

@@ -14,12 +14,36 @@
     [attr.stroke-width]="line.stroke_width"
     [attr.stroke-dasharray]="line.stroke_dasharray"
   />
-	<circle 
-		*ngFor="let circle of circles"
-		[attr.stroke]="circle.stroke"
-		[attr.cx]="circle.point.x"
-		[attr.cy]="circle.point.y"
-		[attr.r]="circle.radius" 
-		[attr.fill]="circle.fill" />
+
+  <ng-container *ngFor="let spot of timeLine.spots" >
+    <circle  
+    [attr.stroke]="spot.stroke"
+		[attr.cx]="spot.point.x"
+		[attr.cy]="spot.point.y"
+		[attr.r]="spot.radius" 
+		[attr.fill]="spot.fill"
+    [attr.stroke-width]="spot.stroke_width"
+    />
+    <ng-container *ngIf="spot.state === 'PAST'">
+      <line class="tick" 
+      [attr.x1]="spot.tick.p1.x" 
+      [attr.y1]="spot.tick.p1.y" 
+      [attr.x2]="spot.tick.p2.x" 
+      [attr.y2]="spot.tick.p2.y" 
+      />
+      <line class="tick" 
+      [attr.x1]="spot.tick.p3.x" 
+      [attr.y1]="spot.tick.p3.y" 
+      [attr.x2]="spot.tick.p4.x" 
+      [attr.y2]="spot.tick.p4.y" 
+      />
+    </ng-container >
+    <ng-container *ngIf="spot.state === 'CURRENT'">
+      <circle class="current" 
+      [attr.cx]="spot.point.x"
+      [attr.cy]="spot.point.y"
+      />
+    </ng-container>
+  </ng-container>  
     
 </svg>

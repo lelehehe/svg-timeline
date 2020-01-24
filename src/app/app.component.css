@@ -1,3 +1,15 @@
 svg {
   outline: 3px solid blue;
 }
+
+
+.tick{
+  fill:none;
+  stroke:#173A64;
+  stroke-miterlimit:10;
+}
+
+.current {
+  fill: #00C853;
+  r: 5;
+}
