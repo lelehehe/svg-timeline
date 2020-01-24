@@ -1,5 +1,6 @@
 svg {
   outline: 3px solid blue;
+  font-family: Roboto;
 }
 
 
@@ -12,4 +13,24 @@ svg {
 .current {
   fill: #00C853;
   r: 5;
+}
+
+.text-middle {
+  text-anchor: middle;
+}
+
+.text-end {
+  text-anchor: end;
+}
+
+.text-start {
+  text-anchor: start;
+}
+.title {
+  font-size: 12px;
+  fill: #757575; 
+}
+.title, .message {
+  font-size: 12px;
+  fill: #173A64; 
 }

@@ -84,8 +84,29 @@ export class TimeLine {
 
     this.trackingTraces.map((item, i) => {
       const spot = new Spot(this.points[i]);
-      const state = this.trackingTraces[i].state;
+      const state = item.state;
       spot.state = state;
+      
+      spot.title = item.title;
+      spot.message = item.message;
+
+      if (i === 0) {
+        spot.titleStyle = "title text-start";
+        spot.titleX = 0;
+        spot.messageStyle = "messsage text-start";
+        spot.messageX = 0;
+      } else if (i === this.trackingTraces.length - 1) {
+        spot.titleStyle = "title text-end";
+        spot.titleX = this.container.w;
+        spot.messageStyle = "messsage text-end";
+        spot.messageX = this.container.w;
+      } else {
+        spot.titleStyle = "title text-middle";
+        spot.titleX = spot.point.x;
+        spot.messageStyle = "message text-middle";
+        spot.messageX = spot.point.x;
+      }
+
 
       if (state === TrackingTraceState.PAST) {
         spot.radius = 7;

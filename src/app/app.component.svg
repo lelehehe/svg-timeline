@@ -1,9 +1,7 @@
 <svg 
 	[attr.width]="container.w" 
 	[attr.height]="container.h" 
-	(click)="addCircle()">
-
-	<text *ngIf="!clicked" x="20" y="15">Click to make circles</text>
+	(click)="doSomething(event)">
 
   <line *ngFor="let line of timeLine.lines" 
     [attr.x1]="line.x1"
@@ -24,6 +22,8 @@
 		[attr.fill]="spot.fill"
     [attr.stroke-width]="spot.stroke_width"
     />
+    <text [attr.x]="spot.titleX" [attr.class]="spot.titleStyle" y="50"> {{spot.title}}</text>
+    <text [attr.x]="spot.messageX" [attr.class]="spot.messageStyle" y="10"> {{spot.message}}</text>
     <ng-container *ngIf="spot.state === 'PAST'">
       <line class="tick" 
       [attr.x1]="spot.tick.p1.x" 

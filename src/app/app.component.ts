@@ -44,4 +44,9 @@ export class AppComponent {
     this.timeLine = new TimeLine(this.container, this.sample1);
   }
 
+  doSomething(event) {
+    console.log(event);
+
+  }
+
 }
